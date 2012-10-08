@@ -47,11 +47,11 @@ namespace WSUASTIS
 				    Title = "Women",
                     Message="Find all your favorite Cougar gear!"
 				},
-				new Category() {
+				/*new Category() {
 				    ImageUri = "/Images/Sweatshirts.jpg", 
 				    Title = "Sweatshirts",
 				    Message = "For those cold Pullman winters"
-				},
+				},*/
 				new Category() {
 				    ImageUri = "/Images/PerformanceApparel.jpg", 
 				    Title = "Performance Apparel", Notification = ""
@@ -96,5 +96,10 @@ namespace WSUASTIS
             base.OnNavigatedTo(e);
         }
         #endregion 
+
+        private void viewCartBtn_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Cart.xaml", UriKind.Relative));
+        }
     }
 }

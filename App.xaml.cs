@@ -25,6 +25,17 @@ namespace WSUASTIS
         }
         #endregion 
         public static Boolean isManager = false;  /* Initially the user is not a manager */
+        public static Double discount = 1.0; 
+
+        public static Dictionary<string, double> discountsDictionary = new Dictionary<string, double>()
+        {
+            {"Faculty", .15},
+            {"Staff", .15},
+            {"Student", .10},
+            {"Bulk", .20}
+        };
+
+        public static List<Product> Cart = new List<Product>();     /* Initialize an empty cart */ 
 
         private static ProductViewModel viewModel = null;
 

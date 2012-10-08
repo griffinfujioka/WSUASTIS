@@ -15,6 +15,7 @@
 using System.Data.Linq.Mapping;     // Table attributes
 using System.ComponentModel;        // Notify Property Changing 
 using System.Data.Linq;             // DataContext 
+using System.Collections.Generic; 
 
 namespace WSUASTIS
 {
@@ -135,7 +136,27 @@ namespace WSUASTIS
                 NotifyPropertyChanged("subcategory");
             }
         }
-    #endregion 
+
+        #region Constructor 
+        public Product()
+        {
+
+        }
+        #endregion 
+        #region Copy Constructor
+        public Product(Product product)
+        {
+            title = product.title;
+            description = product.description;
+            category = product.category;
+            subcategory = product.subcategory;
+            quantity = product.quantity;
+            price = product.price;
+            ProductID = product.ProductID;
+            imageUrl = product.imageUrl; 
+        }
+        #endregion 
+    #endregion
 
         /* Maybe you could add an array of categories for which this product belongs to
          * Then you could iterate through that array to load products from a particular character */ 
@@ -169,6 +190,30 @@ namespace WSUASTIS
         }
 
         #endregion
+    }
+
+    class ProductEqualityComparer : IEqualityComparer<Product>
+    {
+
+        public bool Equals(Product p1, Product p2)
+        {
+            if (p1.title == p2.title)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public int GetHashCode(Product p)
+        {
+            int hCode = (int)p.price ^ p.quantity;
+            return hCode.GetHashCode();
+        }
+
     }
 
     #region Inventory DataContext

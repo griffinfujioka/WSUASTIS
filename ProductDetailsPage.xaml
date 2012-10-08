@@ -1,12 +1,11 @@
 ﻿<phone:PhoneApplicationPage 
-    x:Class="WSUASTIS.SubcategoriesPage"
+    x:Class="WSUASTIS.ProductDetailsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -28,31 +27,23 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <ListBox x:Name="ProductsListBox" Margin="9,6,6,0" SelectionChanged="ProductsListBox_SelectionChanged">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <toolkit:WrapPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <toolkit:HubTile Title="{Binding title}" Margin="3" 
-										 Notification="{Binding Notification}"
-										 DisplayNotification="{Binding DisplayNotification}" 
-										 Message="{Binding quantity}" 
-										 GroupTag="{Binding GroupTag}" Source="{Binding imageUrl}">
-
-                        </toolkit:HubTile>
-
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <TextBlock Height="30" HorizontalAlignment="Left" Margin="15,30,0,0" Name="textBlock1" Text="Quantity: " VerticalAlignment="Top" FontSize="24" />
+            <TextBox Height="72" HorizontalAlignment="Left" Margin="118,6,0,0" Name="qtyTxtBox" Text="" SelectionChanged="qtyTxtBox_SelectionChanged" VerticalAlignment="Top" Width="134" />
+            <TextBlock Height="30" HorizontalAlignment="Left" Margin="27,110,0,0" Name="textBlock2" Text="Price: " VerticalAlignment="Top" FontSize="24" />
+            <TextBox Height="72" HorizontalAlignment="Left" Margin="118,84,0,0" Name="priceTxtBox" Text="" SelectionChanged="priceTxtBox_SelectionChanged" VerticalAlignment="Top" Width="134" />
+            <TextBlock Height="30" HorizontalAlignment="Left" Margin="15,193,0,0" Name="textBlock3" Text="Description:" VerticalAlignment="Top" FontSize="24" />
+            <TextBlock Height="111" HorizontalAlignment="Left" Margin="16,230,0,0" Name="descriptionTxtBlock" Text="" VerticalAlignment="Top" Width="427" />
+            <Button Content="Add to cart" Height="72" HorizontalAlignment="Left" Margin="6,347,0,0" Name="addToCartButton" VerticalAlignment="Top" Width="450" Click="ApplicationBarIconButton_Click_1" />
         </Grid>
     </Grid>
  
     <!--Sample code showing usage of ApplicationBar-->
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton IconUri="/Images/Buttons/appbar.add.rest.png" Text="Add to Cart" Click="ApplicationBarIconButton_Click_1"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/Buttons/appbar.save.rest.png" Text="Save" Click="ApplicationBarIconButton_Click"/>
+            
+            
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem x:Name="viewCartBtn" Text="view cart" Click="viewCartBtn_Click"/>
             </shell:ApplicationBar.MenuItems>

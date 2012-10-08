@@ -21,6 +21,7 @@ namespace WSUASTIS
         {
             InitializeComponent();
 
+            DataContext = App.ViewModel; 
             PageTitle.Text = App.ViewModel.SelectedCategory.Title; /* get category of that send you (i.e., Mens, Womens, etc.) */
             string category = App.ViewModel.SelectedCategory.Title; 
 
@@ -50,6 +51,15 @@ namespace WSUASTIS
                     break; 
                 case "Women":
                     ProductsToPrint = LoadWomensProducts();
+                    break; 
+                case "Sweatshirts":
+                    //ProductsToPrint = LoadSweatshirts(); 
+                    break; 
+                case "Performance Apparel":
+                    ProductsToPrint = LoadPerformanceApparel(); 
+                    break; 
+                case "Hats":
+                    ProductsToPrint = LoadHats();
                     break; 
                default: break; 
             }
@@ -85,7 +95,7 @@ namespace WSUASTIS
         public List<Product> LoadWomensProducts()
         {
 
-            // Specify the query for men's products in inventory. Subcategory will be marked as Men 
+            // Specify the query for women's products in inventory. Subcategory will be marked as Women 
             var WomensInDB = from Product product in App.ViewModel.InventoryDB.Inventory where product.subcategory == "Women" select product;
 
             List<Product> WomensProducts = new List<Product>(WomensInDB); 
@@ -106,7 +116,17 @@ namespace WSUASTIS
         #region LoadPerformanceApparel()
         public List<Product> LoadPerformanceApparel()
         {
+            // Specify the query for performance apparel products in inventory. Subcategory will be marked as 'Performance Apparel' 
+            var PerfApparelInDB = from Product product in App.ViewModel.InventoryDB.Inventory where product.subcategory == "PerformanceApparel" select product;
+
+            List<Product> PerfApparelList = new List<Product>(PerfApparelInDB); 
+
+            
             List<Product> returnList = new List<Product>();
+            returnList.Add(PerfApparelList[0]);
+            returnList.Add(PerfApparelList[1]);
+            returnList.Add(PerfApparelList[2]);
+            returnList.Add(PerfApparelList[3]); 
 
             return returnList;
         }
@@ -115,20 +135,46 @@ namespace WSUASTIS
         #region LoadHats()
         public List<Product> LoadHats()
         {
-            List<Product> returnList = new List<Product>();
+            // Specify the query for Hats in inventory. Subcategory will be marked as 'Hats'
+            var HatsInDB = from Product product in App.ViewModel.InventoryDB.Inventory where product.subcategory == "Hats" select product;
 
+            List<Product> HatsList = new List<Product>(HatsInDB); 
+
+            List<Product> returnList = new List<Product>();
+            returnList.Add(HatsList[0]);
+            returnList.Add(HatsList[1]);
+            returnList.Add(HatsList[2]);
+            returnList.Add(HatsList[3]);
+            returnList.Add(HatsList[4]); 
             return returnList;
         }
         #endregion 
 
-        #region LoadSweatshirts()
-        public List<Product> LoadSweatshirts()
+        #region ProductsListBox Selection Changed
+        private void ProductsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            List<Product> returnList = new List<Product>();
-
-            return returnList;
+            var button = (sender as ListBox).SelectedItem as Product;
+            App.ViewModel.SelectedProduct = button; 
+            if (button != null)
+            {
+                NavigationService.Navigate(new Uri("/ProductDetailsPage.xaml", UriKind.Relative));
+            }
         }
         #endregion 
+
+        #region Override OnNavigatedTo
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            ProductsListBox.SelectedItem = null;
+            base.OnNavigatedTo(e);
+        }
+        #endregion
+
+        private void viewCartBtn_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Cart.xaml", UriKind.Relative));
+        }
+
 
 
 

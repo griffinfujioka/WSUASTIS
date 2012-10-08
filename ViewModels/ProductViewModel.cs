@@ -137,7 +137,7 @@ namespace WSUASTIS
                 ProductInventory.Add(new Product() { title = "Crimson Hat", imageUrl = "/Images/Hats.jpg", subcategory = "Hats", price = 19.99, quantity = 40 });
                 ProductInventory.Add(new Product() { title = "Beanie", imageUrl = "/Images/Men_Beanie.jpg", subcategory = "Hats", price = 14.99, quantity = 50 });
                 ProductInventory.Add(new Product() { title = "Tie Up Beanie", imageUrl = "/Images/TieUpBeanie.jpg", subcategory = "Hats", price = 14.99, quantity = 50 });
-                ProductInventory.Add(new Product() { title = "Visor", imageUrl = "/Images/Visor.jpg", subcategory = "", price = 10, quantity = 1 });
+                ProductInventory.Add(new Product() { title = "Visor", imageUrl = "/Images/Visor.jpg", subcategory = "Hats", price = 10, quantity = 1 });
                 #endregion 
 
                 #region Men
