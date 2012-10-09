@@ -20,21 +20,18 @@ namespace WSUASTIS
         {
             InitializeComponent();
             DataContext = App.ViewModel;
-            PageTitle.Text = App.ViewModel.SelectedProduct.title;
-            qtyTxtBox.Text = App.ViewModel.SelectedProduct.quantity.ToString();
-            priceTxtBox.Text = App.ViewModel.SelectedProduct.price.ToString(); 
+            if (App.ViewModel.SelectedProduct != null)
+            {
+                PageTitle.Text = App.ViewModel.SelectedProduct.title;
+                qtyTxtBox.Text = App.ViewModel.SelectedProduct.quantity.ToString();
+                priceTxtBox.Text = App.ViewModel.SelectedProduct.price.ToString();
+            }
+            else
+            {
+                NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+            }
         }
         #endregion 
-
-        private void qtyTxtBox_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void priceTxtBox_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         #region Save button click
         private void ApplicationBarIconButton_Click(object sender, EventArgs e)
@@ -99,6 +96,22 @@ namespace WSUASTIS
             NavigationService.Navigate(new Uri("/Cart.xaml", UriKind.Relative));
         }
         #endregion 
+
+        #region Return this item 
+        private void returnButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/ReturnPage.xaml", UriKind.Relative));
+        }
+        #endregion 
+
+        #region OnNavigatedTo
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            if(App.ViewModel.SelectedProduct != null)
+                qtyTxtBox.Text = App.ViewModel.SelectedProduct.quantity.ToString(); 
+            base.OnNavigatedTo(e);
+        }
+        #endregion
 
 
     }

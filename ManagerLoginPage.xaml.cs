@@ -16,6 +16,7 @@ namespace WSUASTIS
 {
     public partial class ManagerLoginPage : PhoneApplicationPage
     {
+        public System.Windows.Navigation.JournalEntry navigatedFromPage;    /* Which page did we come from? */ 
         #region A dictionary of valid logins
         Dictionary<string, string> validLogins = new Dictionary<string, string>()
         {
@@ -53,7 +54,21 @@ namespace WSUASTIS
                 
                 string passwordFound = (validLogins[username]);
                 App.isManager = true; /* Let program now the user is now logged in as a manager */
-                MessageBox.Show("Logged in as manager."); 
+                MessageBox.Show("Logged in as manager.");
+                string fromPage = navigatedFromPage.Source.ToString(); 
+                switch (fromPage)
+                {
+                    case "/MainPage.xaml":
+                        NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+                        break; 
+                    case "/ProductDetailsPage.xaml":
+                        NavigationService.Navigate(new Uri("/ProductDetailsPage.xaml", UriKind.Relative));
+                        break; 
+                    case "/CheckoutPage.xaml":
+                        NavigationService.Navigate(new Uri("/CheckoutPage.xaml", UriKind.Relative));
+                        break; 
+                    default: break; 
+                }
                 NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
             }
             catch (Exception)
@@ -64,6 +79,18 @@ namespace WSUASTIS
             }
             
             
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            navigatedFromPage = NavigationService.BackStack.FirstOrDefault();
+
+            if (navigatedFromPage != null && navigatedFromPage.Source.ToString() == "/MainPage.xaml")
+            {
+                NavigationService.RemoveBackEntry();
+            }
         }
     }
 }

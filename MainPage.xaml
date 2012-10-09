@@ -26,7 +26,6 @@
 
         <!--Pivot Control-->
         <controls:Pivot Title="WSUASTIS">
-            
                 <!--Pivot item one-->
                 <controls:PivotItem Header="categories">
                     <!--Double line list with text wrapping-->
@@ -54,11 +53,14 @@
 
                 <!--Pivot item two-->
                 <controls:PivotItem Header="about">
-                    <ListBox Height="180" HorizontalAlignment="Left" Margin="13,223,0,0" Name="listBox1" VerticalAlignment="Top" Width="460">
+                <Grid>
+                    <ListBox Height="440" HorizontalAlignment="Left" Margin="5,12,0,0" Name="listBox1" VerticalAlignment="Top" Width="447">
                         <TextBlock Height="30" HorizontalAlignment="Left" Margin="122,20,0,0" Name="textBlock1" Text="Created by: Griffin Fujioka" VerticalAlignment="Top" />
                         <TextBlock Height="30" HorizontalAlignment="Left" Margin="150,20,0,0" Name="textBlock2" Text="CptS 422 - Fall 2012" VerticalAlignment="Top" />
                         <TextBlock Height="30" HorizontalAlignment="Left" Margin="66,20,0,0" Name="textBlock3" Text="The WSUASTIS mock-up system. Enjoy!" VerticalAlignment="Top" />
                     </ListBox>
+                </Grid>
+                    
                 </controls:PivotItem>
         </controls:Pivot>
         

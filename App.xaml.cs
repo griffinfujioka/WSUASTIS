@@ -25,7 +25,8 @@ namespace WSUASTIS
         }
         #endregion 
         public static Boolean isManager = false;  /* Initially the user is not a manager */
-        public static Double discount = 1.0; 
+        public static Double discount = 1.0;
+        public static int transactionID = 0; 
 
         public static Dictionary<string, double> discountsDictionary = new Dictionary<string, double>()
         {

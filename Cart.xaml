@@ -30,13 +30,13 @@
             <ListBox Height="556" HorizontalAlignment="Left" Margin="6,6,0,0" Name="cartListBox" VerticalAlignment="Top" Width="444">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Button Width="460" Height="120">
+                        <Button Width="440" Height="120">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal" Height="80" Width="400">
                                     <Image x:Name="Image" Height="80" Source="{Binding imageUrl}" Stretch="UniformToFill" Width="80"/>
                                     <StackPanel Orientation="Vertical" Height="80">
                                         <StackPanel Orientation="Horizontal" Height="40">
-                                            <TextBlock Width="100" FontSize="24" Text="Quantity: " Height="40"/>
+                                            <TextBlock Width="100" FontSize="24" Text="Quantity:    " Height="40"/>
                                             <TextBlock Width="200" FontSize="24" Text="{Binding quantity}" Height="40"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Height="40">
@@ -50,7 +50,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button Content="Checkout" Height="72" HorizontalAlignment="Left" Margin="9,562,0,0" Name="checkoutButton" VerticalAlignment="Top" Width="441" Click="checkoutButton_Click"/>
+            <Button Content="check out" Height="72" HorizontalAlignment="Left" Margin="9,562,0,0" Name="checkoutButton" VerticalAlignment="Top" Width="441" Click="checkoutButton_Click"/>
         </Grid>
     </Grid>
  

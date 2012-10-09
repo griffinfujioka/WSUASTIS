@@ -50,7 +50,7 @@
             <TextBlock Height="40" HorizontalAlignment="Left" Margin="123,6,0,0" Name="itemsTotalTxtBlock" Text="" VerticalAlignment="Top" FontSize="28" />
             <TextBlock Height="40" HorizontalAlignment="Left" Margin="123,59,0,0" Name="taxTxtBlock" Text="" VerticalAlignment="Top" FontSize="28" />
             <TextBlock Height="40" HorizontalAlignment="Left" Margin="123,105,0,0" Name="totalTxtBlock" Text="" VerticalAlignment="Top" FontSize="28" />
-            <Button Content="Print receipt" Height="72" HorizontalAlignment="Left" Margin="9,242,0,0" Name="printReceiptBtn" VerticalAlignment="Top" Width="214" Click="printReceiptBtn_Click" />
+            <Button Content="Complete transaction" Height="72" HorizontalAlignment="Left" Margin="0,255,0,0" Name="printReceiptBtn" VerticalAlignment="Top" Width="303" Click="printReceiptBtn_Click" />
         </Grid>
     </Grid>
  
@@ -60,6 +60,7 @@
             
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem x:Name="changeDiscountsBtnAppBar" Text="change discounts" Click="changeDiscountsBtnAppBar_Click"/>
+                <shell:ApplicationBarMenuItem x:Name="mainPageAppBarBtn" Text="return to main page" Click="mainPageAppBarBtn_Click"/>
                 
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>

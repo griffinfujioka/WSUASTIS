@@ -25,6 +25,7 @@ namespace WSUASTIS
 
 
         public List<discountType> discountTypes = new List<discountType>();
+        public string discountTitle; 
 
         #region Intialize Discount List
         public void initializeDiscountList()
@@ -39,6 +40,8 @@ namespace WSUASTIS
         public double itemsTotal;
         public double taxes;
         public double netTotal;
+        public double initialNetTotal;
+        public bool salesTransaction = true; 
 
         #region Checkout Page Constructor
         public CheckoutPage()
@@ -47,11 +50,13 @@ namespace WSUASTIS
             initializeDiscountList(); 
             defaultPicker.ItemsSource = discountTypes;
             itemsTotal = calculateItemizedTotal();
-            itemsTotalTxtBlock.Text = string.Format("Items total: ${0:C}", itemsTotal.ToString()); 
+            itemsTotalTxtBlock.Text = string.Format("Items total: ${0:N2}", itemsTotal); 
             taxes = calculateTax(itemsTotal);
-            taxTxtBlock.Text = string.Format("Tax total: ${0:2}", taxes.ToString()); 
-            netTotal = itemsTotal + taxes;
-            totalTxtBlock.Text = string.Format("Order total: ${0:2}", netTotal.ToString()); 
+            taxTxtBlock.Text = string.Format("Tax total: ${0:N2}", taxes); 
+            initialNetTotal = itemsTotal + taxes;
+            netTotal = initialNetTotal;
+            totalTxtBlock.Text = string.Format("Order total: ${0:N2}", netTotal);
+            discountTitle = ""; 
         }
         #endregion 
 
@@ -59,42 +64,30 @@ namespace WSUASTIS
         private void discountBtn_Click(object sender, RoutedEventArgs e)
         {
 
-            if (!App.isManager)
+            /* Switch on selected discount and subtract accordingly */
+            string selectedDiscount = (defaultPicker.SelectedItem as discountType).type;
+            double discount = 0.0;
+            switch (selectedDiscount)
             {
-                MessageBoxResult mb = MessageBox.Show("Only managers can apply discounts.", "Please login as manager", MessageBoxButton.OKCancel);
-
-                /* TODO: Figure out how to go to login page and if successfully logged in, come back to this page */
-                if (mb == MessageBoxResult.OK)
-                    NavigationService.Navigate(new Uri("/ManagerLoginPage.xaml", UriKind.Relative));
-                else
-                    return;
+                case "Bulk":
+                    discount = App.discountsDictionary[selectedDiscount] * netTotal;
+                    break;
+                case "Faculty":
+                    discount = App.discountsDictionary[selectedDiscount] * netTotal;
+                    break;
+                case "Student":
+                    discount = App.discountsDictionary[selectedDiscount] * netTotal;
+                    break;
+                case "Staff":
+                    discount = App.discountsDictionary[selectedDiscount] * netTotal;
+                    break;
+                default: break;
             }
-            else
-            {
-                /* Switch on selected discount and subtract accordingly */
-                string selectedDiscount = (defaultPicker.SelectedItem as discountType).type;
-                double discount = 0.0; 
-                switch (selectedDiscount)
-                {
-                    case "Bulk":
-                        discount = App.discountsDictionary[selectedDiscount] * netTotal;
-                        break; 
-                    case "Faculty":
-                        discount = App.discountsDictionary[selectedDiscount] * netTotal;
-                        break;
-                    case "Student":
-                        discount = App.discountsDictionary[selectedDiscount] * netTotal;
-                        break;
-                    case "Staff":
-                        discount = App.discountsDictionary[selectedDiscount] * netTotal;
-                        break;
-                    default: break; 
-                }
+            discountTitle = (defaultPicker.SelectedItem as discountType).type; 
+            netTotal = (initialNetTotal - discount); /* Update net total */
+            totalTxtBlock.Text = string.Format("Order total: ${0:2}", netTotal.ToString());
 
-                netTotal = (netTotal - discount); /* Update net total */
-                totalTxtBlock.Text = string.Format("Order total: ${0:2}", netTotal.ToString());
-            }
-         
+
 
         }
         #endregion
@@ -102,8 +95,8 @@ namespace WSUASTIS
         #region ListPicker selection changed event 
         private void defaultPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string discount = (defaultPicker.SelectedItem as discountType).type;
-            App.discount = App.discountsDictionary[discount]; 
+            discountTitle = (defaultPicker.SelectedItem as discountType).type;
+            App.discount = App.discountsDictionary[discountTitle]; 
         }
         #endregion 
 
@@ -114,7 +107,6 @@ namespace WSUASTIS
             {
                 MessageBoxResult mb = MessageBox.Show("Only managers can edit inventory information.", "Please login as manager", MessageBoxButton.OKCancel);
 
-                /* TODO: Figure out how to go to login page and if successfully logged in, come back to this page */
                 if (mb == MessageBoxResult.OK)
                     NavigationService.Navigate(new Uri("/ManagerLoginPage.xaml", UriKind.Relative));
                 else
@@ -149,17 +141,36 @@ namespace WSUASTIS
         #region Print receipts click
         private void printReceiptBtn_Click(object sender, RoutedEventArgs e)
         {
+            /* Find the product in the database and adjust it's quantity value */ 
             EmailComposeTask emailTask = new EmailComposeTask();
 
-            string Order = "Your sale order has been processed.\n";
-            Order += "Transaction ID: 13\n";    /* TODO: Unique transaction IDs */ 
-
+            string Order = "Transaction ID: " + App.transactionID ;
+            Order += "\nTransaction type: Sale " + "\n\n";
+            App.transactionID++;
+            Order += "Items:"; 
             foreach (Product product in App.Cart)
             {
-                Order += "\n" + product.title;
+                var foundProduct = App.ViewModel.InventoryDB.Inventory.FirstOrDefault(s => s.title == product.title);
+
+                if (foundProduct != null)
+                {
+                    if (salesTransaction)        /* If it's a sales transaction */
+                    {
+                        foundProduct.quantity -= product.quantity;  /* subtract from the quantity */
+                        App.ViewModel.SaveChangesToDB(); 
+                    }
+                }
+                Order += "\n" + product.title + "\nPrice: $" + string.Format("{0:N2}", product.price) + "\nQuantity: " + product.quantity + "\n";
             }
 
-            Order += "\nTotal: " + netTotal.ToString();
+            Order += "\n\nItems total: $" + string.Format("{0:N2}", itemsTotal);
+            Order += "\nTax: $" + string.Format("{0:N2}", taxes);
+            Order += "\nTotal: $" + string.Format("{0:N2}",netTotal);
+
+            if(discountTitle != "")
+                Order += "\n\nDiscounts applied: " + discountTitle;
+            /* TODO: Discounts applied */
+            Order += "\n\nThank you for your business with WSUASTIS!"; 
 
             emailTask.Subject = "Your WSUASTIS order has been processed.";
             emailTask.Body = Order;
@@ -168,13 +179,13 @@ namespace WSUASTIS
         }
         #endregion 
 
+        #region Change discount percentages 
         private void changeDiscountsBtnAppBar_Click(object sender, EventArgs e)
         {
             if (!App.isManager)
             {
                 MessageBoxResult mb = MessageBox.Show("Only managers can edit inventory information.", "Please login as manager", MessageBoxButton.OKCancel);
 
-                /* TODO: Figure out how to go to login page and if successfully logged in, come back to this page */
                 if (mb == MessageBoxResult.OK)
                     NavigationService.Navigate(new Uri("/ManagerLoginPage.xaml", UriKind.Relative));
                 else
@@ -182,6 +193,11 @@ namespace WSUASTIS
             }
             NavigationService.Navigate(new Uri("/ChangeDiscountAmountsPage.xaml", UriKind.Relative));
         }
+        #endregion 
 
+        private void mainPageAppBarBtn_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+        }
     }
 }

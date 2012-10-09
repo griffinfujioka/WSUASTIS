@@ -110,7 +110,7 @@ namespace WSUASTIS
             Products.Add(product);  /* Add to observable collection */ 
         }
 
-
+        #region Load Collections from Database
         // Query database and load the collections and list used by the pivot pages.
         public void LoadCollectionsFromDatabase()
         {
@@ -122,12 +122,14 @@ namespace WSUASTIS
             Products = new ObservableCollection<Product>(ProductsInDB);
 
         }
+        #endregion 
 
-        #region Add the products to the database manually on initialization of app 
+        #region Add the products to the database manually on initialization of app
         public void PopulateProductDB()
         {
             /* I'm having an error right now where each time I run the application I'm putting all of these Products in the database again... :( */ 
-            /* Start by creating a list of Products. We'll actually insert them into the database later */ 
+            /* Start by creating a list of Products. We'll actually insert them into the database later */
+            ProductEqualityComparer pc = new ProductEqualityComparer(); 
             List<Product> ProductInventory = new List<Product>();
             if (!App.GlobalVars.DBHasBeenPopulated)
             {
@@ -158,17 +160,9 @@ namespace WSUASTIS
                 #region Performance Apparel 
                 ProductInventory.Add(new Product() { title = "Black Golf Shirt", imageUrl = "/Images/BlackPolo.jpg", subcategory = "PerformanceApparel", price = 39.99, quantity = 25 });
                 ProductInventory.Add(new Product() { title = "Athletic Shorts", imageUrl = "/Images/Men_Shorts.jpg", subcategory = "PerformanceApparel", price = 29.99, quantity = 30 });
-                ProductInventory.Add(new Product() { title = "Athletic Shrots", imageUrl = "/Images/PerformanceApparel.jpg", subcategory = "PerformanceApparel", price = 29.99, quantity = 30 });
+                ProductInventory.Add(new Product() { title = "Athletic Shorts", imageUrl = "/Images/PerformanceApparel.jpg", subcategory = "PerformanceApparel", price = 29.99, quantity = 30 });
                 ProductInventory.Add(new Product() { title = "Women's Athletic Pants", imageUrl = "/Images/Women_PerformancePants.jpg", subcategory = "PerformanceApparel", price = 24.99, quantity = 50 });
                 #endregion 
-
-                /*
-                ProductInventory.Add(new Product() { title = "", imageUrl = "", subcategory = "", price = 10, quantity = 1 });
-                ProductInventory.Add(new Product() { title = "", imageUrl = "", subcategory = "", price = 10, quantity = 1 });
-                ProductInventory.Add(new Product() { title = "", imageUrl = "", subcategory = "", price = 10, quantity = 1 });
-                ProductInventory.Add(new Product() { title = "", imageUrl = "", subcategory = "", price = 10, quantity = 1 });
-                 */ 
-                
 
                 /* Add the products to the database */ 
                 foreach (Product product in ProductInventory)
