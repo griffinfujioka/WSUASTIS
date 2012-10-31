@@ -50,7 +50,7 @@
             <TextBlock Height="40" HorizontalAlignment="Left" Margin="123,6,0,0" Name="itemsTotalTxtBlock" Text="" VerticalAlignment="Top" FontSize="28" />
             <TextBlock Height="40" HorizontalAlignment="Left" Margin="123,59,0,0" Name="taxTxtBlock" Text="" VerticalAlignment="Top" FontSize="28" />
             <TextBlock Height="40" HorizontalAlignment="Left" Margin="123,105,0,0" Name="totalTxtBlock" Text="" VerticalAlignment="Top" FontSize="28" />
-            <Button Content="Complete transaction" Height="72" HorizontalAlignment="Left" Margin="0,255,0,0" Name="printReceiptBtn" VerticalAlignment="Top" Width="303" Click="printReceiptBtn_Click" />
+            <Button Content="Complete transaction" Height="72" HorizontalAlignment="Left" Margin="153,255,0,0" Name="printReceiptBtn" VerticalAlignment="Top" Width="303" Click="printReceiptBtn_Click" />
         </Grid>
     </Grid>
  

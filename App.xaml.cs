@@ -22,8 +22,15 @@ namespace WSUASTIS
         public static class GlobalVars
         {
             public static bool DBHasBeenPopulated = false;
+            public static bool salesTransaction = true;
+            public static double itemsTotal;
+            public static double taxes;
+            public static double netTotal;
+            public static double initialNetTotal;
+            public static string discountTitle; 
         }
         #endregion 
+
         public static Boolean isManager = false;  /* Initially the user is not a manager */
         public static Double discount = 1.0;
         public static int transactionID = 0; 

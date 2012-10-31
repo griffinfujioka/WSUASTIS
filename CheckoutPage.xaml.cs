@@ -37,11 +37,11 @@ namespace WSUASTIS
         }
         #endregion 
 
-        public double itemsTotal;
+       /* public double itemsTotal;
         public double taxes;
         public double netTotal;
         public double initialNetTotal;
-        public bool salesTransaction = true; 
+        public bool salesTransaction = true; */ 
 
         #region Checkout Page Constructor
         public CheckoutPage()
@@ -49,13 +49,13 @@ namespace WSUASTIS
             InitializeComponent();
             initializeDiscountList(); 
             defaultPicker.ItemsSource = discountTypes;
-            itemsTotal = calculateItemizedTotal();
-            itemsTotalTxtBlock.Text = string.Format("Items total: ${0:N2}", itemsTotal); 
-            taxes = calculateTax(itemsTotal);
-            taxTxtBlock.Text = string.Format("Tax total: ${0:N2}", taxes); 
-            initialNetTotal = itemsTotal + taxes;
-            netTotal = initialNetTotal;
-            totalTxtBlock.Text = string.Format("Order total: ${0:N2}", netTotal);
+            App.GlobalVars.itemsTotal = calculateItemizedTotal();
+            itemsTotalTxtBlock.Text = string.Format("Items total: ${0:N2}", App.GlobalVars.itemsTotal);
+            App.GlobalVars.taxes = calculateTax(App.GlobalVars.itemsTotal);
+            taxTxtBlock.Text = string.Format("Tax total: ${0:N2}", App.GlobalVars.taxes);
+            App.GlobalVars.initialNetTotal = App.GlobalVars.itemsTotal + App.GlobalVars.taxes;
+            App.GlobalVars.netTotal = App.GlobalVars.initialNetTotal;
+            totalTxtBlock.Text = string.Format("Order total: ${0:N2}", App.GlobalVars.netTotal);
             discountTitle = ""; 
         }
         #endregion 
@@ -70,22 +70,22 @@ namespace WSUASTIS
             switch (selectedDiscount)
             {
                 case "Bulk":
-                    discount = App.discountsDictionary[selectedDiscount] * netTotal;
+                    discount = App.discountsDictionary[selectedDiscount] * App.GlobalVars.netTotal;
                     break;
                 case "Faculty":
-                    discount = App.discountsDictionary[selectedDiscount] * netTotal;
+                    discount = App.discountsDictionary[selectedDiscount] * App.GlobalVars.netTotal;
                     break;
                 case "Student":
-                    discount = App.discountsDictionary[selectedDiscount] * netTotal;
+                    discount = App.discountsDictionary[selectedDiscount] * App.GlobalVars.netTotal;
                     break;
                 case "Staff":
-                    discount = App.discountsDictionary[selectedDiscount] * netTotal;
+                    discount = App.discountsDictionary[selectedDiscount] * App.GlobalVars.netTotal;
                     break;
                 default: break;
             }
-            discountTitle = (defaultPicker.SelectedItem as discountType).type; 
-            netTotal = (initialNetTotal - discount); /* Update net total */
-            totalTxtBlock.Text = string.Format("Order total: ${0:2}", netTotal.ToString());
+            discountTitle = (defaultPicker.SelectedItem as discountType).type;
+            App.GlobalVars.netTotal = (App.GlobalVars.initialNetTotal - discount); /* Update net total */
+            totalTxtBlock.Text = string.Format("Order total: ${0:2}", App.GlobalVars.netTotal.ToString());
 
 
 
@@ -142,40 +142,42 @@ namespace WSUASTIS
         private void printReceiptBtn_Click(object sender, RoutedEventArgs e)
         {
             /* Find the product in the database and adjust it's quantity value */ 
-            EmailComposeTask emailTask = new EmailComposeTask();
+            //EmailComposeTask emailTask = new EmailComposeTask();
 
-            string Order = "Transaction ID: " + App.transactionID ;
-            Order += "\nTransaction type: Sale " + "\n\n";
+           // string Order = "Transaction ID: " + App.transactionID ;
+           // Order += "\nTransaction type: Sale " + "\n\n";
             App.transactionID++;
-            Order += "Items:"; 
+            //Order += "Items:"; 
             foreach (Product product in App.Cart)
             {
                 var foundProduct = App.ViewModel.InventoryDB.Inventory.FirstOrDefault(s => s.title == product.title);
 
                 if (foundProduct != null)
                 {
-                    if (salesTransaction)        /* If it's a sales transaction */
+                    if (App.GlobalVars.salesTransaction)        /* If it's a sales transaction */
                     {
                         foundProduct.quantity -= product.quantity;  /* subtract from the quantity */
                         App.ViewModel.SaveChangesToDB(); 
                     }
                 }
-                Order += "\n" + product.title + "\nPrice: $" + string.Format("{0:N2}", product.price) + "\nQuantity: " + product.quantity + "\n";
+                //Order += "\n" + product.title + "\nPrice: $" + string.Format("{0:N2}", product.price) + "\nQuantity: " + product.quantity + "\n";
             }
 
-            Order += "\n\nItems total: $" + string.Format("{0:N2}", itemsTotal);
-            Order += "\nTax: $" + string.Format("{0:N2}", taxes);
-            Order += "\nTotal: $" + string.Format("{0:N2}",netTotal);
+            NavigationService.Navigate(new Uri("/ReceiptPage.xaml", UriKind.Relative));
 
-            if(discountTitle != "")
-                Order += "\n\nDiscounts applied: " + discountTitle;
+           // Order += "\n\nItems total: $" + string.Format("{0:N2}", App.GlobalVars.itemsTotal);
+            //Order += "\nTax: $" + string.Format("{0:N2}", App.GlobalVars.taxes);
+           // Order += "\nTotal: $" + string.Format("{0:N2}", App.GlobalVars.netTotal);
+
+           /* if(discountTitle != "")
+                Order += "\n\nDiscounts applied: " + discountTitle;*/ 
             /* TODO: Discounts applied */
-            Order += "\n\nThank you for your business with WSUASTIS!"; 
+            //Order += "\n\nThank you for your business with WSUASTIS!"; 
 
-            emailTask.Subject = "Your WSUASTIS order has been processed.";
-            emailTask.Body = Order;
+            //emailTask.Subject = "Your WSUASTIS order has been processed.";
+           // emailTask.Body = Order;
 
-            emailTask.Show();
+           // emailTask.Show();
         }
         #endregion 
 
